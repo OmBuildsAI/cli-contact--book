@@ -11,7 +11,7 @@ class Contact:
         print(f"Phone: {self.phone}")
         print(f"Email: {self.email}")
         print("-" * 30)
-
+    
 
 class ContactBook:
     """Saare contacts ko manage karta hai"""
@@ -20,6 +20,9 @@ class ContactBook:
         self.contacts = []  # abhi ke liye list mein store karenge (memory mein)
     
     def add_contact(self, name, phone, email):
+        if name.strip() == "":
+            print("\n❌ Naam khaali nahi ho sakta!\n")
+            return
         new_contact = Contact(name, phone, email)
         self.contacts.append(new_contact)
         print(f"\n✅ Contact '{name}' add ho gaya!\n")
@@ -29,8 +32,24 @@ class ContactBook:
             print("\nAbhi koi contact nahi hai.\n")
             return
         print(f"\n--- Total Contacts: {len(self.contacts)} ---")
-        for contact in self.contacts:
+        for index, contact in enumerate(self.contacts, start=1):
+            print(f"\n[{index}]")
             contact.display()
+    
+    def search_contact(self, keyword):
+        keyword = keyword.strip().lower()
+        results = []
+        
+        for contact in self.contacts:
+            if keyword in contact.name.lower():
+                results.append(contact)
+        
+        if len(results) == 0:
+            print(f"\n❌ '{keyword}' se koi contact nahi mila.\n")
+        else:
+            print(f"\n--- {len(results)} contact(s) mile ---")
+            for contact in results:
+                contact.display()
 
 
 def main():
@@ -40,7 +59,8 @@ def main():
         print("\n===== CLI CONTACT BOOK =====")
         print("1. Add Contact")
         print("2. Show All Contacts")
-        print("3. Exit")
+        print("3. Search Contact")
+        print("4. Exit")
         
         choice = input("Apna choice enter karo (1-3): ")
         
@@ -52,8 +72,12 @@ def main():
         
         elif choice == "2":
             book.show_all_contacts()
-        
+
         elif choice == "3":
+            keyword = input("Naam se search karo: ")
+            book.search_contact(keyword)
+        
+        elif choice == "4":
             print("Bye! 👋")
             break
         
@@ -63,3 +87,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
